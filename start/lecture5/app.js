@@ -11,9 +11,15 @@ class App{
         
 		this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color( 0xaaaaaa );
-
+		
 		//TO DO: Add Light code here
-			
+		const ambient = new THREE.HemisphereLight(0xaaaaaa, 0xbbbbff, 1);
+		this.scene.add(ambient);
+
+		const light = new THREE.DirectionalLight(0xFFFFFF, 3);
+        light.position.set( 0, 0.8, 0);
+        this.scene.add(light);
+
 		this.renderer = new THREE.WebGLRenderer({ antialias: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -21,6 +27,10 @@ class App{
         this.renderer.setAnimationLoop(this.render.bind(this));
 
 		//TO DO: Add Box code here
+		const geometry = new THREE.BoxGeometry()
+		const material = new THREE.MeshStandardMaterial( { color: 0xFF0000 });
+        this.mesh = new THREE.Mesh( geometry, material ); 
+        this.scene.add(this.mesh);
 
 		const controls = new OrbitControls( this.camera, this.renderer.domElement );
     
@@ -29,12 +39,15 @@ class App{
     
     resize(){
 		//TO DO: Add resize code
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize( window.innerWidth, window.innerHeight );  
     }
     
 	render( ) {  
 		//TO DO: Add mesh rotate code here
-
-		
+		this.mesh.rotateX(0.01)
+		this.mesh.rotateY(0.01)
 		this.renderer.render( this.scene, this.camera );
     }
 }
